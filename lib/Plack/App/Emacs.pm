@@ -36,8 +36,8 @@ sub call {
     binmode $f, ':utf8';
     my $out = <$f>;
     close $f;
-    $out =~ s/^"(.+)"$/$1/;
-    my $res = $json->decode($out);
+    my $res = $json->decode(eval($out));
+    $res->[1] ||= [];
     $res->[2][0] = encode_utf8 $res->[2][0] if $res;
     $res || [500, ['Content-Type' => 'text/plain'], ['Internal Server Error']];
 }
